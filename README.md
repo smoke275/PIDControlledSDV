@@ -1,8 +1,50 @@
 # Control and Trajectory Tracking for Autonomous Vehicle
 
+## Snapshots
+
+![img](img/1.png)
+
+![img](img/2.png)
+
+![img](img/3.png)
+
+![img](img/4.png)
+
+## PID Performance (Steering)
+
+The values I achieved were-
+
+Kp, Kd, Ki = 0.3, 0.001, 0.78
+
+![img](img/best1.png)
+
+We can see that the steering output tracks the error quite nicely which means the response time for steering was good.
+
+## PID Performance (Throttle)
+
+The values I achieved were-
+
+Kp, Kd, Ki = 0.2, 0.001, 0.06
+
+![img](img/best2.png)
+
+We can see that error for throttle converges quickly. However this was not the best values for throttle. The best values I got were Kp, Kd, Ki = 0.2, 0.005, 0.01. The reason for this discrepancy will be discussed later.
+
+## Questions
+
+#### How would you design a way to automatically tune the PID parameters?
+
+This can be done using Twiddle which is a systematic approach for this task.
+
+####  PID controller is a model free controller, i.e. it does not use a model of the car. Could you explain the pros and cons of this type of controller?
+
+PID has pros and cons as I experienced in this project. It is very useful since it doesn't rely on the model. However, this project created a scenario where the output of one PID controller directly affects the performance of the other. Even if the throttle PID is very responsive and converges quickly, it is bound to have some errors. These error propagate to the next PID controller and massively impacts its performance. So, sometimes if a model is indeed present, some controllers like the fuzzy controller maybe used to address compounding PID controlled scenarios.
+
+
 # Proportional-Integral-Derivative (PID)
 
 In this project, you will apply the skills you have acquired in this course to design a PID controller to perform vehicle trajectory tracking. Given a trajectory as an array of locations, and a simulation environment, you will design and code a PID controller and test its efficiency on the CARLA simulator used in the industry.
+
 
 ### Installation
 
@@ -95,19 +137,12 @@ Plot the saved values using the command (in nd013-c6-control-refresh/project):
 python3 plot_pid.py
 ```
 
-You might need to install a few additional python modules: 
+You might need to install a few additional python modules:
 
 ```
 pip3 install pandas
 pip3 install matplotlib
 ```
-
-Answer the following questions:
-- Add the plots to your report and explain them (describe what you see)
-- What is the effect of the PID according to the plots, how each part of the PID affects the control command?
-- How would you design a way to automatically tune the PID parameters?
-- PID controller is a model free controller, i.e. it does not use a model of the car. Could you explain the pros and cons of this type of controller?
-- (Optional) What would you do to improve the PID controller?
 
 
 ### Tips:
@@ -115,4 +150,3 @@ Answer the following questions:
 - When you wil be testing your c++ code, restart the Carla simulator to remove the former car from the simulation.
 - If the simulation freezes on the desktop mode but is still running on the terminal, close the desktop and restart it.
 - When you will be tuning the PID parameters, try between those values:
-
