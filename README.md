@@ -18,6 +18,8 @@ Kp, Kd, Ki = 0.3, 0.001, 0.78
 
 ![img](img/best1.png)
 
+The above plot describes the calculated error and the actual output by the system plotted against iterations over time.
+
 We can see that the steering output tracks the error quite nicely which means the response time for steering was good.
 
 ## PID Performance (Throttle)
