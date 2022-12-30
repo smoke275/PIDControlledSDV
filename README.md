@@ -35,6 +35,8 @@ We can see that error for throttle converges quickly. However this was not the b
 - Then the oscillations were damped by increasing the Kd term
 - Finally the Ki term to increased which affected the frequency of oscillations and forced faster convergence.
 
+For both cases multiple values were considered and the best was used to the simulator.
+
 ## Questions
 
 #### How would you design a way to automatically tune the PID parameters?
