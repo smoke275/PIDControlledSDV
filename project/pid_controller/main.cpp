@@ -200,7 +200,7 @@ int main ()
   cout << "starting server" << endl;
   uWS::Hub h;
 
-  double new_delta_time = 1.0;
+  double new_delta_time;
   int i = 0;
 
   fstream file_steer;
@@ -218,9 +218,13 @@ int main ()
   /**
   * TODO (Step 1): create pid (pid_steer) for steer command and initialize values
   **/
+  fstream vals;
+  vals.open("vals.txt");
+  double kp, kd, ki;
+	vals >> kp >> kd >> ki;
   PID pid_steer = PID();
 //   pid_steer.Init(0.15, 0.00001, 1.0, -1.2, 1.2);
-    pid_steer.Init(0.29, 0.0011, 0.71, 1.2, -1.2);
+    pid_steer.Init(kp, kd, ki, 			1.2, -1.2); // kp, kd, ki = 0.3, 0.001, 0.78
 
   // initialize pid throttle
   /**
@@ -229,7 +233,9 @@ int main ()
 
   PID pid_throttle = PID();
 //   pid_throttle.Init(0.0001, 0.00001, 1.0, -1.0, 1.0); 
-  pid_throttle.Init(0.05, 0.001, 0.019, 1, -1);
+  vals >> kp >> kd >> ki;
+  pid_throttle.Init(kp, kd, ki, 			1.0, -1.0);// kp, kd, ki = 0.3, 0.001, 0.78
+  vals.close();
 
   h.onMessage([&pid_steer, &pid_throttle, &new_delta_time, &timer, &prev_timer, &i, &prev_timer](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode)
   {
@@ -303,10 +309,7 @@ int main ()
           /**
           * TODO (step 3): compute the steer error (error_steer) from the position and the desired trajectory
           **/
-          double desired_steer = angle_between_points(x_position, y_position, x_points[x_points.size() - 1], y_points[y_points.size() - 1]);
-//           if (desired_steer > M_PI)  desired_steer -= 2 * M_PI; // to normalize in the range [-pi, pi]
-//           else if (desired_steer <= -M_PI) desired_steer += 2 * M_PI;
-          error_steer = desired_steer - yaw;
+          error_steer = angle_between_points(x_position, y_position, x_points[x_points.size()-1], y_points[y_points.size()-1]) - yaw;
 
           /**
           * TODO (step 3): uncomment these lines
@@ -340,8 +343,7 @@ int main ()
           * TODO (step 2): compute the throttle error (error_throttle) from the position and the desired speed
           **/
           // modify the following line for step 2
-          error_throttle = v_points[v_points.size()- 1] - velocity;
-
+          error_throttle = v_points[v_points.size()-1] - velocity;
 
 
           double throttle_output;
@@ -361,6 +363,10 @@ int main ()
           } else {
             throttle_output = 0;
             brake_output = -throttle;
+//             if (throttle_output < -0.5)
+//             	brake_output = -throttle;
+//             else
+//               	brake_output = -throttle * 0.5;
           }
 
           // Save data
