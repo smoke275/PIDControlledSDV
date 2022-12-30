@@ -28,7 +28,10 @@ Kp, Kd, Ki = 0.2, 0.001, 0.06
 
 ![img](img/best2.png)
 
-We can see that error for throttle converges quickly. However this was not the best values for throttle. The best values I got were Kp, Kd, Ki = 0.2, 0.005, 0.01. The reason for this discrepancy will be discussed later.
+We can see that error for throttle converges quickly. However this was not the best values for throttle. The best values I got were Kp, Kd, Ki = 0.2, 0.005, 0.01. The reason for this discrepancy will be discussed later. This was achieved by -
+- First tuning the Kp term till oscillations were achieved
+- Then the oscillations were damped by increasing the Kd term
+- Finally the Ki term to increased which affected the frequency of oscillations and forced faster convergence.
 
 ## Questions
 

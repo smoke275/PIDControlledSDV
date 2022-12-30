@@ -218,13 +218,16 @@ int main ()
   /**
   * TODO (Step 1): create pid (pid_steer) for steer command and initialize values
   **/
-  fstream vals;
-  vals.open("vals.txt");
-  double kp, kd, ki;
-	vals >> kp >> kd >> ki;
+  // fstream vals;
+  // vals.open("vals.txt");  // used file to check for more values for  PID
+  // double kp, kd, ki;
+	// vals >> kp >> kd >> ki;
   PID pid_steer = PID();
-//   pid_steer.Init(0.15, 0.00001, 1.0, -1.2, 1.2);
-    pid_steer.Init(kp, kd, ki, 			1.2, -1.2); // kp, kd, ki = 0.3, 0.001, 0.78
+  // pid_steer.Init(0.1,  0.000, 0.0, -1.2, 1.2);
+  // pid_steer.Init(0.3,  0.003, 0.50, -1.2, 1.2);
+  // pid_steer.Init(0.2,  0.001, 0.68, -1.2, 1.2);
+  pid_steer.Init(0.3,  0.001, 0.78, -1.2, 1.2);
+    // pid_steer.Init(kp, kd, ki, 			1.2, -1.2); // kp, kd, ki = 0.3, 0.001, 0.78
 
   // initialize pid throttle
   /**
@@ -232,10 +235,13 @@ int main ()
   **/
 
   PID pid_throttle = PID();
-//   pid_throttle.Init(0.0001, 0.00001, 1.0, -1.0, 1.0); 
-  vals >> kp >> kd >> ki;
-  pid_throttle.Init(kp, kd, ki, 			1.0, -1.0);// kp, kd, ki = 0.3, 0.001, 0.78
-  vals.close();
+  // pid_throttle.Init(0.1, 0.0, 0.0, -1.0, 1.0);
+  // pid_throttle.Init(0.3, 0.004, 0.0, -1.0, 1.0);
+  // pid_throttle.Init(0.3, 0.003, 0.03, -1.0, 1.0);
+  pid_throttle.Init(0.2, 0.001, 0.06, -1.0, 1.0);
+  // vals >> kp >> kd >> ki;
+  // pid_throttle.Init(kp, kd, ki, 			1.0, -1.0);// kp, kd, ki = 0.2, 0.001, 0.06
+  // vals.close();
 
   h.onMessage([&pid_steer, &pid_throttle, &new_delta_time, &timer, &prev_timer, &i, &prev_timer](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode)
   {
